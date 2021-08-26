@@ -1,0 +1,6 @@
+.statistics-screen-buttons {
+  display: flex;
+}
+.button {
+  margin-right: 5px;
+}
