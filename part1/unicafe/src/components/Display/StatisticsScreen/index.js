@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Button from "../../Controls/Button";
 import Title from "../Title";
-import Hits from "../Hits";
+import Statistic from "../Statistic";
 
 const StatisticsScreen = () => {
 
@@ -13,6 +13,10 @@ const StatisticsScreen = () => {
   const handleClickNeutral = () => setNeutral(neutral + 1);
   const handleClickBad = () => setBad(bad + 1);
 
+  const getAll = () => good + neutral + bad;
+  const getAverage = () => (good - bad) / getAll();
+  const getPositive = () => `${(good / getAll()) * 100} %`;
+
   return (
     <div className="statistics-screen">
       <div className="statistics-screen-buttons">
@@ -22,9 +26,12 @@ const StatisticsScreen = () => {
       </div>
       <div className="statistics-screen-hits">
         <Title text="statitics"/>
-        <Hits label="Good" counts={good}/>
-        <Hits label="Neutral" counts={neutral}/>
-        <Hits label="Bad" counts={bad}/>
+        <Statistic label="Good" counts={good}/>
+        <Statistic label="Neutral" counts={neutral}/>
+        <Statistic label="Bad" counts={bad}/>
+        <Statistic label="All" counts={getAll()}/>
+        <Statistic label="Average" counts={getAverage()}/>
+        <Statistic label="Positive" counts={getPositive()}/>
       </div>
     </div>
   )
