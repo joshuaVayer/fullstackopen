@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Button from "../../Controls/Button";
 import Title from "../Title";
-import Statistic from "../Statistic";
+import StatisticLine from "../StatisticLine";
 
 const StatisticsScreen = () => {
 
@@ -24,15 +24,19 @@ const StatisticsScreen = () => {
         <Button text="neutral" onClick={handleClickNeutral} />
         <Button text="bad" onClick={handleClickBad} />
       </div>
-      <div className="statistics-screen-hits">
-        <Title text="statitics"/>
-        <Statistic label="Good" counts={good}/>
-        <Statistic label="Neutral" counts={neutral}/>
-        <Statistic label="Bad" counts={bad}/>
-        <Statistic label="All" counts={getAll()}/>
-        <Statistic label="Average" counts={getAverage()}/>
-        <Statistic label="Positive" counts={getPositive()}/>
-      </div>
+      <Title text="statitics"/>
+      { getAll() ? (
+        <div className="statistics-screen-details">
+          <StatisticLine label="Good" value={good}/>
+          <StatisticLine label="Neutral" value={neutral}/>
+          <StatisticLine label="Bad" value={bad}/>
+          <StatisticLine label="All" value={getAll()}/>
+          <StatisticLine label="Average" value={getAverage()}/>
+          <StatisticLine label="Positive" value={getPositive()}/>
+        </div>
+      ) : (
+        <div>No feedback given 😕</div>
+      )}
     </div>
   )
 }
