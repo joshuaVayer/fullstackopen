@@ -27,12 +27,17 @@ const StatisticsScreen = () => {
       <Title text="statitics"/>
       { getAll() ? (
         <div className="statistics-screen-details">
-          <StatisticLine label="Good" value={good}/>
-          <StatisticLine label="Neutral" value={neutral}/>
-          <StatisticLine label="Bad" value={bad}/>
-          <StatisticLine label="All" value={getAll()}/>
-          <StatisticLine label="Average" value={getAverage()}/>
-          <StatisticLine label="Positive" value={getPositive()}/>
+          <table>
+            <tbody>
+              <StatisticLine label="Good" value={good}/>
+              <StatisticLine label="Neutral" value={neutral}/>
+              <StatisticLine label="Bad" value={bad}/>
+              <StatisticLine label="All" value={getAll()}/>
+              <StatisticLine label="Average" value={getAverage()}/>
+              <StatisticLine label="Positive" value={getPositive()}/>
+            </tbody>
+          </table>
+
         </div>
       ) : (
         <div>No feedback given 😕</div>
