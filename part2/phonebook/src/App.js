@@ -1,28 +1,22 @@
 import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 
+import personsService from './service/phonebook'
+
+import "./index.css";
+
 const App = () => {
   const [name, setName] = useState('')
   const [number, setNumber] = useState('')
-
+  const [statusMessage, setStatusMessage] = useState(null)
   const [persons, setPersons] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3001/persons')
-      .then(response => {
-        if (response.status !== 200) {
-          console.log('Looks like there was a problem. Status Code: ' +
-            response.status);
-          return;
-        }
-
-        // Examine the text in the response
-        response.json().then(function(data) {
-          setPersons(data);
-        });
-      }).catch(error => {
-        console.log(error);
-      });
+    personsService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
+      })
   }, []);
 
   const handleAddPerson = () => {
@@ -43,14 +37,33 @@ const App = () => {
       return;
     }
 
-    setPersons(persons.concat(newPerson));
-    setName('');
-    setNumber('');
+    personsService
+      .add(newPerson)
+      .then(addedPerson => {
+        setPersons(persons.concat(addedPerson))
+        setName('')
+        setNumber('')
+        setStatusMessage({ text: `${addedPerson.name} was added to the phonebook`, className: 'success' })
+      });
+
+  };
+
+  const handleDeletePerson = ({name, id}) => {
+    const isConfirmed = window.confirm(`Delete ${name}?`);
+
+    if (isConfirmed) {
+      personsService
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id))
+        })
+    }
   };
 
   return (
     <div>
       <h2>Phonebook</h2>
+          {statusMessage && <p className={statusMessage.className} >{statusMessage.text}</p>}
         <Filter persons={persons} setPersons={setPersons} />
       <form>
         <div>
@@ -67,7 +80,10 @@ const App = () => {
       <button onClick={handleAddPerson}>add</button>
       <h2>Numbers</h2>
       {persons.map(person =>
-        <p key={person.name}>{person.name} - {person.number}</p>
+        <div key={person.name}>
+          <span>{person.name} - {person.number} </span>
+          <button onClick={() => handleDeletePerson(person)}>delete</button>
+        </div>
       )}
     </div>
   )
