@@ -1,13 +1,16 @@
 const fs = require("fs");
+const cors = require('cors');
 const morgan = require("morgan");
 const express = require("express");
-const persons = require("./data/persons");
-const { json } = require("express");
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 const app = express();
 
 app.use(express.json());
+
+app.use(express.static("build"));
+
+app.use(cors());
 
 app.use(morgan((tokens, req, res) => [
     tokens.method(req, res),
@@ -20,10 +23,15 @@ app.use(morgan((tokens, req, res) => [
 ));
 
 app.get("/api/persons", (req, res) => {
+  const rawdata = fs.readFileSync('./data/persons.json');
+  const persons = JSON.parse(rawdata);
   res.json(persons);
 });
 
 app.get("/api/persons/:id", (req, res) => {
+  const rawdata = fs.readFileSync('./data/persons.json');
+  const persons = JSON.parse(rawdata);
+
   const id = Number(req.params.id);
   const person = persons.find(person => person.id === id);
   res.json(person);
