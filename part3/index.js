@@ -8,7 +8,7 @@ const app = express();
 
 app.use(express.json());
 
-app.use(express.static("build"));
+app.use(express.static("frontend"));
 
 app.use(cors());
 
