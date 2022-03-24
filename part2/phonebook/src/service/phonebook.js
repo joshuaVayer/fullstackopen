@@ -1,15 +1,16 @@
 import axios from 'axios';
+const api = "http://localhost:3001/api/persons/";
 
 const getAll = () =>
   new Promise((resolve, reject) => {
-    axios.get('http://localhost:3001/api/persons/')
+    axios.get(api)
       .then(response => resolve(response.data))
       .catch(reject);
   });
 
 const add = ({name, number}) =>
   new Promise((resolve, reject) => {
-    axios.post('http://localhost:3001/api/persons/', {
+    axios.post(api, {
       name,
       number,
     })
@@ -19,7 +20,7 @@ const add = ({name, number}) =>
 
 const remove = (id) =>
   new Promise((resolve, reject) => {
-    axios.delete(`http://localhost:3001/api/persons/${id}`)
+    axios.delete(`${api}${id}`)
       .then(response => resolve(response.data))
       .catch(reject);
   });
