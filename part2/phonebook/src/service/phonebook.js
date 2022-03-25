@@ -1,5 +1,5 @@
 import axios from 'axios';
-const api = "http://localhost:3001/api/persons/";
+const api = "https://espress-joshua.herokuapp.com/api/persons/";
 
 const getAll = () =>
   new Promise((resolve, reject) => {
@@ -18,6 +18,16 @@ const add = ({name, number}) =>
       .catch(reject);
   });
 
+const update = (id, {name, number}) =>
+  new Promise((resolve, reject) => {
+    axios.put(`${api}${id}`, {
+      name,
+      number,
+    })
+      .then(response => resolve(response.data))
+      .catch(reject);
+  });
+
 const remove = (id) =>
   new Promise((resolve, reject) => {
     axios.delete(`${api}${id}`)
@@ -29,6 +39,7 @@ const exports = {
   getAll,
   add,
   remove,
+  update
 }
 
 export default exports;

@@ -6,18 +6,26 @@ import personsService from './service/phonebook'
 import "./index.css";
 
 const App = () => {
+  const [_isMounted, setIsMounted] = useState(false)
   const [name, setName] = useState('')
   const [number, setNumber] = useState('')
-  const [statusMessage, setStatusMessage] = useState(null)
   const [persons, setPersons] = useState([]);
+  const [statusMessage, setStatusMessage] = useState(null)
 
   useEffect(() => {
+    if (!_isMounted) {
+      fetchData();
+      setIsMounted(true)
+    }
+  }, [persons, _isMounted]);
+
+  const fetchData = () => {
     personsService
-      .getAll()
-      .then(initialPersons => {
-        setPersons(initialPersons)
-      })
-  }, []);
+    .getAll()
+    .then(initialPersons => {
+      setPersons(initialPersons)
+    })
+  };
 
   const handleAddPerson = () => {
     if (!name || !number) {
@@ -25,15 +33,13 @@ const App = () => {
       return;
     }
 
-    const newPerson = {
-      name: name,
-      number: number,
-    };
+    const newPerson = { name, number };
 
     const isDuplicate = persons.some(person => person.name === newPerson.name);
 
     if (isDuplicate) {
-      alert(`${newPerson.name} is already added to phonebook`);
+      personsService.update(persons.find(person => person.name === newPerson.name)._id, newPerson)
+        .then(fetchData)
       return;
     }
 
@@ -48,15 +54,13 @@ const App = () => {
 
   };
 
-  const handleDeletePerson = ({name, id}) => {
+  const handleDeletePerson = ({name, _id}) => {
     const isConfirmed = window.confirm(`Delete ${name}?`);
 
     if (isConfirmed) {
       personsService
-        .remove(id)
-        .then(() => {
-          setPersons(persons.filter(person => person.id !== id))
-        })
+        .remove(_id)
+        .then(() => fetchData())
     }
   };
 
