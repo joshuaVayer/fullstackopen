@@ -1,15 +1,26 @@
 import axios from 'axios';
+const api = "https://espress-joshua.herokuapp.com/api/persons/";
 
 const getAll = () =>
   new Promise((resolve, reject) => {
-    axios.get('http://localhost:3001/persons')
+    axios.get(api)
       .then(response => resolve(response.data))
       .catch(reject);
   });
 
 const add = ({name, number}) =>
   new Promise((resolve, reject) => {
-    axios.post('http://localhost:3001/persons', {
+    axios.post(api, {
+      name,
+      number,
+    })
+      .then(response => resolve(response.data))
+      .catch(reject);
+  });
+
+const update = (id, {name, number}) =>
+  new Promise((resolve, reject) => {
+    axios.put(`${api}${id}`, {
       name,
       number,
     })
@@ -19,7 +30,7 @@ const add = ({name, number}) =>
 
 const remove = (id) =>
   new Promise((resolve, reject) => {
-    axios.delete(`http://localhost:3001/persons/${id}`)
+    axios.delete(`${api}${id}`)
       .then(response => resolve(response.data))
       .catch(reject);
   });
@@ -28,6 +39,7 @@ const exports = {
   getAll,
   add,
   remove,
+  update
 }
 
 export default exports;
