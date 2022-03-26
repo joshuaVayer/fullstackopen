@@ -6,6 +6,7 @@ import personsService from './service/phonebook'
 import "./index.css";
 
 const App = () => {
+
   const [_isMounted, setIsMounted] = useState(false)
   const [name, setName] = useState('')
   const [number, setNumber] = useState('')
@@ -26,6 +27,7 @@ const App = () => {
       setPersons(initialPersons)
     })
   };
+
 
   const handleAddPerson = () => {
     if (!name || !number) {

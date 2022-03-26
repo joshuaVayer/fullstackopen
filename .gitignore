@@ -13,5 +13,4 @@ yarn-error.log*
 .npm/
 yarn.lock
 .env
-
 course-materials
