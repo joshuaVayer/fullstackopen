@@ -1,13 +1,14 @@
-const mongoose = require('mongoose');
-const dotenv = require('dotenv').config();
+require("dotenv").config();
+const mongoose = require("mongoose");
 
+// eslint-disable-next-line no-undef
 const { MONGODB_URI } = process.env;
 
 
 mongoose.connect(MONGODB_URI).then(() => {
-  console.log('Connected to MongoDB 🎉')
+  console.log("Connected to MongoDB 🎉")
 }).catch(error => {
-  console.log('error connecting to MongoDB:', error.message)
+  console.log("error connecting to MongoDB:", error.message)
 })
 
 const personSchema = new mongoose.Schema({
@@ -15,7 +16,7 @@ const personSchema = new mongoose.Schema({
   number: String
 })
 
-const Person = mongoose.model('Person', personSchema)
+const Person = mongoose.model("Person", personSchema)
 
 const find = () =>
   new Promise((resolve, reject) => {
@@ -26,7 +27,7 @@ const find = () =>
     })
   });
 
-const create = ({name, number}) =>
+const create = ({ name, number }) =>
   new Promise((resolve, reject) => {
     const person = new Person({
       name,
@@ -42,7 +43,7 @@ const create = ({name, number}) =>
 const remove = (id) =>
   new Promise((resolve, reject) => {
     if (!id) {
-      reject(new Error('id missing'))
+      reject(new Error("id missing"))
       return;
     }
     Person.findByIdAndRemove(id).then(result => {
@@ -52,9 +53,9 @@ const remove = (id) =>
     })
   });
 
-const update = (id, {name, number}) =>
+const update = (id, { name, number }) =>
   new Promise((resolve, reject) => {
-    Person.findByIdAndUpdate(id, {name, number}).then(result => {
+    Person.findByIdAndUpdate(id, { name, number }).then(result => {
       resolve(result)
     }).catch(error => {
       reject(error)

@@ -1,10 +1,11 @@
-const cors = require('cors');
+const cors = require("cors");
 const morgan = require("morgan");
 const express = require("express");
 const errorHandler = require("./errorHandler");
 
 const { find, create, remove, update } = require("./mongo");
 
+// eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 3001;
 const app = express();
 
@@ -19,10 +20,10 @@ app.use(morgan((tokens, req, res) => [
     tokens.method(req, res),
     tokens.url(req, res),
     tokens.status(req, res),
-    tokens.res(req, res, 'content-length'), '-',
-    tokens['response-time'](req, res), 'ms',
+    tokens.res(req, res, "content-length"), "-",
+    tokens["response-time"](req, res), "ms",
     JSON.stringify(req.body)
-  ].join(' ')
+  ].join(" ")
 ));
 
 
@@ -52,7 +53,7 @@ app.post("/api/persons", (req, res) => {
     return res.status(400).json({ error: "name or number missing" });
   }
 
-  create({name, number}).then(result => {
+  create({ name, number }).then(result => {
     res.json(result);
   });
 });
@@ -65,7 +66,7 @@ app.put("/api/persons/:id", (req, res) => {
     return res.status(400).json({ error: "name or number missing" });
   }
 
-  update(id, {name, number}).then(result => {
+  update(id, { name, number }).then(result => {
     res.json(result);
   });
 });
@@ -78,9 +79,11 @@ app.delete("/api/persons/:id", (req, res) => {
   });
 });
 
-app.get("/info", (req, res) => {
-  res.send(`<p>Phonebook has info for ${persons.length} people</p>
-  <p>${new Date()}</p>`);
+app.get("/info", (_, res) => {
+  find().then(result => {
+    res.send(`<p>Phonebook has info for ${ result.length } people</p>
+    <p>${new Date()}</p>`);
+  });
 });
 
 app.use(errorHandler);
